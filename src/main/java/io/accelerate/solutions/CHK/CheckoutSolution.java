@@ -74,39 +74,56 @@ public class CheckoutSolution {
         int total = 0;
 
         List<Character> groupItems = Arrays.asList('S', 'T', 'X', 'Y', 'Z');
-        List<Integer> groupPrices = new ArrayList<>();
+        List<Character> allGroupSKU = new ArrayList<>();
+        //List<Integer> groupPrices = new ArrayList<>();
         for(char c: groupItems) {
             int sum = count.getOrDefault(c, 0);
             for(int i = 0; i < sum; i++) {
-                groupPrices.add(priceMap.get(c));
+                allGroupSKU.add(c);
             }
         }
 
-        groupPrices.sort(Collections.reverseOrder());
+        //groupPrices.sort(Collections.reverseOrder());
+        allGroupSKU.sort((a,b) -> priceMap.get(b) - priceMap.get(a));
 
         int groupTotal = 0;
-        int groupOfThree = groupPrices.size() / 3;
-        groupTotal += groupOfThree * 45;
+        int totalGroupItems = allGroupSKU.size();
+        int groupsOfThree = totalGroupItems / 3;
 
-        int remainder = groupPrices.size() % 3;
-        for(int i = 0; i < remainder; i++) {
-            groupTotal += groupPrices.get(groupPrices.size() - 1 - i);
+        groupTotal += groupsOfThree * 45;
+
+        int leftover = totalGroupItems % 3;
+        for(int i = 0; i < leftover; i++) {
+            groupTotal += priceMap.get(allGroupSKU.get(groupsOfThree * 3 + i));
         }
 
-        int remaining = groupPrices.size() % 3;
-        int remainingGroupItems = groupPrices.size() - remaining;
-        int toRemove = remainingGroupItems;
-
-        for(char c: groupItems) {
-            int current = count.getOrDefault(c, 0);
-            while(current > 0 && toRemove > 0) {
-                current--;
-                toRemove--;
-            }
-            count.put(c, current);
+        int discountCount = groupsOfThree * 3;
+        for(int i = 0; i < discountCount; i++) {
+            char sku = allGroupSKU.get(i);
+            count.put(sku, count.get(sku) - 1);
         }
 
         total += groupTotal;
+
+//        int remainder = groupPrices.size() % 3;
+//        for(int i = 0; i < remainder; i++) {
+//            groupTotal += groupPrices.get(groupPrices.size() - 1 - i);
+//        }
+//
+//        int remaining = groupPrices.size() % 3;
+//        int remainingGroupItems = groupPrices.size() - remaining;
+//        int toRemove = remainingGroupItems;
+//
+//        for(char c: groupItems) {
+//            int current = count.getOrDefault(c, 0);
+//            while(current > 0 && toRemove > 0) {
+//                current--;
+//                toRemove--;
+//            }
+//            count.put(c, current);
+//        }
+//
+//        total += groupTotal;
 
 
         for(Map.Entry<Character, Integer> entry: count.entrySet()) {
@@ -207,4 +224,5 @@ public class CheckoutSolution {
         //throw new SolutionNotImplementedException();
     }
 }
+
 
