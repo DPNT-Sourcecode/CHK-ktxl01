@@ -87,15 +87,14 @@ public class CheckoutSolution {
         if(!allGroupSKU.isEmpty()) {
             allGroupSKU.sort((a,b) -> priceMap.get(b) - priceMap.get(a));
 
-            int groupTotal = 0;
             int totalGroupItems = allGroupSKU.size();
             int groupsOfThree = totalGroupItems / 3;
 
-            groupTotal += groupsOfThree * 45;
+            total += groupsOfThree * 45;
 
             int leftover = totalGroupItems % 3;
             for(int i = 0; i < leftover; i++) {
-                groupTotal += priceMap.get(allGroupSKU.get(groupsOfThree * 3 + i));
+                total += priceMap.get(allGroupSKU.get(groupsOfThree * 3 + i));
             }
 
             int discountCount = groupsOfThree * 3;
@@ -227,6 +226,3 @@ public class CheckoutSolution {
         //throw new SolutionNotImplementedException();
     }
 }
-
-
-
