@@ -2,8 +2,7 @@ package io.accelerate.solutions.CHK;
 
 import io.accelerate.runner.SolutionNotImplementedException;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class CheckoutSolution {
     public Integer checkout(String skus) {
@@ -22,7 +21,7 @@ public class CheckoutSolution {
         priceMap.put('H', 10);
         priceMap.put('I', 35);
         priceMap.put('J', 60);
-        priceMap.put('K', 80);
+        priceMap.put('K', 70);
         priceMap.put('L', 90);
         priceMap.put('M', 15);
         priceMap.put('N', 40);
@@ -30,14 +29,14 @@ public class CheckoutSolution {
         priceMap.put('P', 50);
         priceMap.put('Q', 30);
         priceMap.put('R', 50);
-        priceMap.put('S', 30);
+        priceMap.put('S', 20);
         priceMap.put('T', 20);
         priceMap.put('U', 40);
         priceMap.put('V', 50);
         priceMap.put('W', 20);
-        priceMap.put('X', 90);
-        priceMap.put('Y', 10);
-        priceMap.put('Z', 50);
+        priceMap.put('X', 17);
+        priceMap.put('Y', 20);
+        priceMap.put('Z', 21);
 
         Map<Character, Integer> count = new HashMap<>();
         for(char c: skus.toCharArray()) {
@@ -72,9 +71,43 @@ public class CheckoutSolution {
         int freeU = numU / 4;
         count.put('U', numU - freeU);
 
-
-
         int total = 0;
+
+        List<Character> groupItems = Arrays.asList('S', 'T', 'X', 'Y', 'Z');
+        List<Integer> groupPrices = new ArrayList<>();
+        for(char c: groupItems) {
+            int sum = count.getOrDefault(c, 0);
+            for(int i = 0; i < sum; i++) {
+                groupPrices.add(priceMap.get(c));
+            }
+        }
+
+        groupPrices.sort(Collections.reverseOrder());
+
+        int groupTotal = 0;
+        int groupOfThree = groupPrices.size() / 3;
+        groupTotal += groupOfThree * 45;
+
+        int remainder = groupPrices.size() % 3;
+        for(int i = 0; i < remainder; i++) {
+            groupTotal += groupPrices.get(groupPrices.size() - 1 - i);
+        }
+
+        int remaining = groupPrices.size() % 3;
+        int remainingGroupItems = groupPrices.size() - remaining;
+        int toRemove = remainingGroupItems;
+
+        for(char c: groupItems) {
+            int current = count.getOrDefault(c, 0);
+            while(current > 0 && toRemove > 0) {
+                current--;
+                toRemove--;
+            }
+            count.put(c, current);
+        }
+
+        total += groupTotal;
+
 
         for(Map.Entry<Character, Integer> entry: count.entrySet()) {
             char item = entry.getKey();
@@ -120,7 +153,7 @@ public class CheckoutSolution {
                     total += quantity * 60;
                     break;
                 case 'K':
-                    total += (quantity / 2) * 150 + (quantity % 2) * 80;
+                    total += (quantity / 2) * 120 + (quantity % 2) * 70;
                     break;
                 case 'L':
                     total += quantity * 90;
@@ -144,10 +177,11 @@ public class CheckoutSolution {
                     total += quantity * 50;
                     break;
                 case 'S':
-                    total += quantity * 30;
-                    break;
                 case 'T':
-                    total += quantity * 20;
+                case 'X':
+                case 'Y':
+                case 'Z':
+                    total += quantity * priceMap.get(item);
                     break;
                 case 'U':
                     total += quantity * 40;
@@ -162,16 +196,8 @@ public class CheckoutSolution {
                 case 'W':
                     total += quantity * 20;
                     break;
-                case 'X':
-                    total += quantity * 90;
-                    break;
-                case 'Y':
-                    total += quantity * 10;
-                    break;
-                case 'Z':
-                    total += quantity * 50;
-                    break;
                 default:
+                    total += quantity * priceMap.get(item);
                     return -1;
             }
         }
@@ -181,3 +207,4 @@ public class CheckoutSolution {
         //throw new SolutionNotImplementedException();
     }
 }
+
