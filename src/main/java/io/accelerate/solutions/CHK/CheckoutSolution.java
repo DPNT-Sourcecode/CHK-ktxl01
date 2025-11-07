@@ -17,6 +17,7 @@ public class CheckoutSolution {
         priceMap.put('C', 20);
         priceMap.put('D', 15);
         priceMap.put('E', 40);
+        priceMap.put('F', 10);
 
         Map<Character, Integer> count = new HashMap<>();
         for(char c: skus.toCharArray()) {
@@ -32,6 +33,11 @@ public class CheckoutSolution {
         int freeB = numE / 2;
         int payB = Math.max(0, numB - freeB);
         count.put('B', payB);
+
+        int numF = count.getOrDefault('F', 0);
+        int freeF = numF / 3;
+        int payF = numF - freeF;
+        count.put('F', payF);
 
         int total = 0;
 
@@ -59,6 +65,9 @@ public class CheckoutSolution {
                 case 'E':
                     total += quantity * 40;
                     break;
+                case 'F':
+                    total += quantity + 10;
+                    break;
                 default:
                     return -1;
             }
@@ -69,4 +78,3 @@ public class CheckoutSolution {
         //throw new SolutionNotImplementedException();
     }
 }
-
