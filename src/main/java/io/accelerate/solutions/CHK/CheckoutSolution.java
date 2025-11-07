@@ -93,14 +93,17 @@ public class CheckoutSolution {
             total += groupsOfThree * 45;
 
             int leftover = totalGroupItems % 3;
-            for(int i = 0; i < leftover; i++) {
-                total += priceMap.get(allGroupSKU.get(groupsOfThree * 3 + i));
+            for(int i = groupsOfThree * 3; i < totalGroupItems; i++) {
+                total += priceMap.get(allGroupSKU.get(i));
             }
 
-            int discountCount = groupsOfThree * 3;
-            for(int i = 0; i < discountCount; i++) {
-                char sku = allGroupSKU.get(i);
-                count.put(sku, count.get(sku) - 1);
+//            int discountCount = groupsOfThree * 3;
+//            for(int i = 0; i < discountCount; i++) {
+//                char sku = allGroupSKU.get(i);
+//                count.put(sku, count.get(sku) - 1);
+//            }
+            for(char c: groupItems) {
+                count.put(c, 0);
             }
 
         }
@@ -200,7 +203,7 @@ public class CheckoutSolution {
                 case 'X':
                 case 'Y':
                 case 'Z':
-                    total += quantity * priceMap.get(item);
+//                    total += quantity * priceMap.get(item);
                     break;
                 case 'U':
                     total += quantity * 40;
@@ -226,3 +229,4 @@ public class CheckoutSolution {
         //throw new SolutionNotImplementedException();
     }
 }
+
