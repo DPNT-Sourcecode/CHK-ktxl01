@@ -84,26 +84,27 @@ public class CheckoutSolution {
         }
 
         //groupPrices.sort(Collections.reverseOrder());
-        allGroupSKU.sort((a,b) -> priceMap.get(b) - priceMap.get(a));
+        if(!allGroupSKU.isEmpty()) {
+            allGroupSKU.sort((a,b) -> priceMap.get(b) - priceMap.get(a));
 
-        int groupTotal = 0;
-        int totalGroupItems = allGroupSKU.size();
-        int groupsOfThree = totalGroupItems / 3;
+            int groupTotal = 0;
+            int totalGroupItems = allGroupSKU.size();
+            int groupsOfThree = totalGroupItems / 3;
 
-        groupTotal += groupsOfThree * 45;
+            groupTotal += groupsOfThree * 45;
 
-        int leftover = totalGroupItems % 3;
-        for(int i = 0; i < leftover; i++) {
-            groupTotal += priceMap.get(allGroupSKU.get(groupsOfThree * 3 + i));
+            int leftover = totalGroupItems % 3;
+            for(int i = 0; i < leftover; i++) {
+                groupTotal += priceMap.get(allGroupSKU.get(groupsOfThree * 3 + i));
+            }
+
+            int discountCount = groupsOfThree * 3;
+            for(int i = 0; i < discountCount; i++) {
+                char sku = allGroupSKU.get(i);
+                count.put(sku, count.get(sku) - 1);
+            }
+
         }
-
-        int discountCount = groupsOfThree * 3;
-        for(int i = 0; i < discountCount; i++) {
-            char sku = allGroupSKU.get(i);
-            count.put(sku, count.get(sku) - 1);
-        }
-
-        total += groupTotal;
 
 //        int remainder = groupPrices.size() % 3;
 //        for(int i = 0; i < remainder; i++) {
@@ -129,6 +130,7 @@ public class CheckoutSolution {
         for(Map.Entry<Character, Integer> entry: count.entrySet()) {
             char item = entry.getKey();
             int quantity = entry.getValue();
+            if(quantity <= 0) continue;
 
             switch (item) {
                 case 'A':
@@ -193,6 +195,7 @@ public class CheckoutSolution {
                 case 'R':
                     total += quantity * 50;
                     break;
+
                 case 'S':
                 case 'T':
                 case 'X':
@@ -224,5 +227,6 @@ public class CheckoutSolution {
         //throw new SolutionNotImplementedException();
     }
 }
+
 
 
