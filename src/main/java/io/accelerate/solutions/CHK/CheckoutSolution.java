@@ -66,7 +66,7 @@ public class CheckoutSolution {
                     total += quantity * 40;
                     break;
                 case 'F':
-                    total += quantity + 10;
+                    total += quantity * 10;
                     break;
                 default:
                     return -1;
@@ -78,3 +78,4 @@ public class CheckoutSolution {
         //throw new SolutionNotImplementedException();
     }
 }
+
